@@ -5,7 +5,7 @@ import com.maybank.wordcount.service.WordCountService;
 
 /**
  * 
- * @Author: Karimullah_117730 
+ * @Author: Karimullah Shaik 
  * 
  */
 public final class ScannedWords {

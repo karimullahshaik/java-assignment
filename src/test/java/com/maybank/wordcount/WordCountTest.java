@@ -11,7 +11,6 @@ import org.junit.Test;
 
 import com.maybank.wordcount.service.WordCountService;
 import com.maybank.wordcount.service.impl.WordCountExcludingStopWordsImpl;
-import com.maybank.wordcount.service.impl.WordCountServiceImpl;
 
 /**
  * @author Karimullah Shaik
