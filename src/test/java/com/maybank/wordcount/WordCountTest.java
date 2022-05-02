@@ -34,7 +34,7 @@ public class WordCountTest {
 	@Test
 	public void countWordsEmptyString() {
 		WordCountService counterService = new WordCountExcludingStopWordsImpl();
-		assertEquals(5l, counterService.count(""));
+		assertEquals(0l, counterService.count(""));
 	}
 	
 
