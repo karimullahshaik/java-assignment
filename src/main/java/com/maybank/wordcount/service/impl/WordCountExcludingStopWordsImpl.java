@@ -30,7 +30,7 @@ public class WordCountExcludingStopWordsImpl implements WordCountService {
 			if(WordCountUtil.checkForEmptyString(text)) {
 				return count;
 			}
-			String[] parts = text.split("\\s");
+			String[] parts = text.trim().split("\\s");
 			return Arrays.stream(parts).filter(s -> WordCountUtil.isWord(s)).filter(s -> notAStopWord(s, stopWords)).count();
 			
 			
