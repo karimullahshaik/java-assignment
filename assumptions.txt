@@ -1,0 +1,5 @@
+Assumptions for Iteration 3:
+1. case sensitive stop words are only filtered
+2. Only one word from the file per each line
+3. Input File Read data considered is only one line
+4. File Path in command line argument must be absolute path
