@@ -1,0 +1,3 @@
+Assumptions for Iteration 2:
+1. case sensitive stop words are only filtered
+2. Only one word from the file per each line

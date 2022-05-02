@@ -1,7 +1,8 @@
 package com.maybank.wordcount;
 
 import java.util.Scanner;
-import com.maybank.wordcount.service.impl.WordCountServiceImpl;
+
+import com.maybank.wordcount.service.impl.WordCountExcludingStopWordsImpl;
 
 /**
  * 
@@ -19,7 +20,7 @@ public class WordCountCalculator {
 	 */
 	public static void main(String[] args) {
 		final ScannedWords inputString = new ScannedWords(
-	            new Scanner(System.in),  new WordCountServiceImpl());
+	            new Scanner(System.in),  new WordCountExcludingStopWordsImpl());
 		inputString.readAndPrintTheWords();
 
 	}
