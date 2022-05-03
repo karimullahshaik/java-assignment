@@ -34,7 +34,7 @@ public final class ScannedWords {
     public void readAndPrintTheWords() {
     	System.out.println("Enter Input: ");
         String input = this.scan.nextLine();
-        System.out.println("Number of Words: " + this.text.count(input));
+        System.out.println(String.format("Number of Words: %s, Unique: %s", this.text.count(input), this.text.uniqueCount(input)));
     }
 
 }

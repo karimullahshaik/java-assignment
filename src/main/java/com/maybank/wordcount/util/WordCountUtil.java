@@ -13,7 +13,11 @@ public class WordCountUtil {
 	
 	
 	public static boolean isWord(final String text) {
-		return text.matches("[a-zA-Z]+");
+		return text.matches("[a-zA-Z.]+");
+	}
+	
+	public static String[] splitString(String text, String delimiter) {
+		return text.trim().split(delimiter);
 	}
 
 }

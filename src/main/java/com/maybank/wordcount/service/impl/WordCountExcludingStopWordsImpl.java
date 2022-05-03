@@ -25,24 +25,20 @@ public class WordCountExcludingStopWordsImpl implements WordCountService {
 	public long count(String text) {
 		try {
 			List<String> stopWords = readStopWordsFromFile("stopwords.txt");
-			long count = 0;
-			
 			if(WordCountUtil.checkForEmptyString(text)) {
-				return count;
+				return 0;
 			}
-			String[] parts = text.trim().split("\\s");
+			String[] parts = WordCountUtil.splitString(text, "\\s");
 			return Arrays.stream(parts).filter(s -> WordCountUtil.isWord(s)).filter(s -> notAStopWord(s, stopWords)).count();
-			
 			
 		} catch (IOException e) {
 			log.info("Exception processing the wordcount: " + e.getMessage());
 			
 		}
-		
 		return 0;
 	}
 	
-	private List<String> readStopWordsFromFile(String path) throws IOException {
+	protected List<String> readStopWordsFromFile(String path) throws IOException {
 		File file = new File(getClass().getClassLoader().getResource(path).getFile());
 		FileReader fileReader = new FileReader(file);
 		try (BufferedReader br = new BufferedReader(fileReader)) {
@@ -55,8 +51,9 @@ public class WordCountExcludingStopWordsImpl implements WordCountService {
 		}
 	}
 	
-	private boolean notAStopWord(String word, List<String> stopwords) {
+	protected boolean notAStopWord(String word, List<String> stopwords) {
 		return stopwords == null || !stopwords.contains(word);
 	}
+	
 
 }

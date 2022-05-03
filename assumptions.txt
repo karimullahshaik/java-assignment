@@ -1,5 +1,5 @@
-Assumptions for Iteration 3:
-1. case sensitive stop words are only filtered
-2. Only one word from the file per each line
-3. Input File Read data considered is only one line
-4. File Path in command line argument must be absolute path
+Assumptions for Iteration 4:
+1. Trim function is applied on the Input text from the very first iteration.
+2. Added "." as a consideration for the word. 
+3. Added "-" as a split condition for word when compared with previous three iterations.
+4. Word count is case sensitive.
