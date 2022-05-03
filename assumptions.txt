@@ -1,0 +1,5 @@
+Assumptions for Iteration 4:
+1. Trim function is applied on the Input text from the very first iteration.
+2. Added "." as a consideration for the word. 
+3. Added "-" as a split condition for word when compared with previous three iterations.
+4. Word count is case sensitive.
