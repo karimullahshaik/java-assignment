@@ -1,6 +1,6 @@
 /**
  * 
- * @Author: Karimullah_117730 
+ * @Author: Karimullah Shaik
  * 
  */
 package com.maybank.wordcount.service.impl;
@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.maybank.wordcount.util.WordCountUtil;
 
@@ -42,21 +41,11 @@ public class UniqueWordCountServiceImpl extends WordCountExcludingStopWordsImpl 
 	
 	@Override
 	public long uniqueCount(final String text) {
-		try {
-			List<String> stopWords = readStopWordsFromFile("stopwords.txt");
-			if(WordCountUtil.checkForEmptyString(text)) {
-				return 0;
-			}
-			String[] parts = WordCountUtil.splitString(text, "[-\\s]");
-			collectedWords = Arrays.stream(parts).filter(s -> WordCountUtil.isWord(s)).filter(s -> notAStopWord(s, stopWords)).collect(Collectors.toList());
-			return new HashSet<>(collectedWords).size();
-			
-		} catch (IOException e) {
-			log.info("Exception processing the unique wordcount: " + e.getMessage());
-			
+		if(WordCountUtil.checkForEmptyString(text)) {
+			return 0;
 		}
-		
-		return collectedWords.size();
+		return new HashSet<>(collectedWords).size();
+			
 	}
 
 }

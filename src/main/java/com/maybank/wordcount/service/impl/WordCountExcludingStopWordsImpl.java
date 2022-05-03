@@ -7,8 +7,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import com.maybank.wordcount.service.WordCountService;
 import com.maybank.wordcount.util.WordCountUtil;
@@ -20,16 +22,19 @@ import com.maybank.wordcount.util.WordCountUtil;
  */
 public class WordCountExcludingStopWordsImpl implements WordCountService {
 	Logger log = Logger.getLogger(WordCountExcludingStopWordsImpl.class.getName());
+	
+	private List<String> collectedWords;
 
 	@Override
 	public long count(String text) {
 		try {
-			List<String> stopWords = readStopWordsFromFile("stopwords.txt");
 			if(WordCountUtil.checkForEmptyString(text)) {
 				return 0;
 			}
+			List<String> stopWords = readStopWordsFromFile("stopwords.txt");
 			String[] parts = WordCountUtil.splitString(text, "\\s");
-			return Arrays.stream(parts).filter(s -> WordCountUtil.isWord(s)).filter(s -> notAStopWord(s, stopWords)).count();
+			collectedWords = Arrays.stream(parts).filter(s -> WordCountUtil.isWord(s)).filter(s -> notAStopWord(s, stopWords)).collect(Collectors.toList());
+			return collectedWords.size();
 			
 		} catch (IOException e) {
 			log.info("Exception processing the wordcount: " + e.getMessage());
@@ -55,5 +60,13 @@ public class WordCountExcludingStopWordsImpl implements WordCountService {
 		return stopwords == null || !stopwords.contains(word);
 	}
 	
+	
+	@Override
+	public long uniqueCount(final String text) {
+		if(WordCountUtil.checkForEmptyString(text)) {
+			return 0;
+		}
+		return new HashSet<>(collectedWords).size();
+	}
 
 }
