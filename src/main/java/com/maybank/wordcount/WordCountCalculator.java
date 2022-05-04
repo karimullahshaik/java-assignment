@@ -23,12 +23,13 @@ public class WordCountCalculator {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
+		ScannedWords inputString;
 		if(args.length == 0) {
-			final ScannedWords inputString = new ScannedWords(
+			inputString = new ScannedWords(
 					new Scanner(System.in),  new WordCountExcludingStopWordsImpl());
 			inputString.readAndPrintTheWordsOptionalIndexes(false);
 		} else if("-index".equalsIgnoreCase(args[0])){
-			final ScannedWords inputString = new ScannedWords(
+			inputString = new ScannedWords(
 					new Scanner(System.in),  new WordCountExcludingStopWordsImpl());
 			inputString.readAndPrintTheWordsOptionalIndexes(true);
 		}
