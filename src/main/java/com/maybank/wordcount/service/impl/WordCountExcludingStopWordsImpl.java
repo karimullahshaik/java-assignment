@@ -9,7 +9,6 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -19,38 +18,38 @@ import com.maybank.wordcount.util.WordCountUtil;
 
 /**
  * 
- * @Author: Karimullah Shaik 
+ * @Author: Karimullah Shaik
+ * 
+ *          Service Implementation Class to count the words excluding the
+ *          specified stop words read from the file.
  * 
  */
 public class WordCountExcludingStopWordsImpl implements WordCountService {
-	Logger log = Logger.getLogger(WordCountExcludingStopWordsImpl.class.getName());
-	
-	private List<String> stopWords;
-	
-	private List<String> collectedWords;
-	
+	static Logger log = Logger.getLogger(WordCountExcludingStopWordsImpl.class.getName());
+
+	static List<String> stopWords;
+
 	private static final String DELIMITER_FOR_WORD_SPLIT = "\\s";
+
+	static {
+		try {
+			stopWords = readStopWordsFromFile("stopwords.txt");
+		} catch (IOException e) {
+			log.info("Exception processing the wordcount: " + e.getMessage());
+		}
+	}
 
 	@Override
 	public long count(String text) {
-		try {
-			if(WordCountUtil.checkForEmptyString(text)) {
-				return 0;
-			}
-			stopWords = readStopWordsFromFile("stopwords.txt");
-			String[] parts = WordCountUtil.splitString(text, DELIMITER_FOR_WORD_SPLIT);
-			collectedWords = Arrays.stream(parts).filter(s -> WordCountUtil.isWord(s)).filter(s -> notAStopWord(s, stopWords)).collect(Collectors.toList());
-			return collectedWords.size();
-			
-		} catch (IOException e) {
-			log.info("Exception processing the wordcount: " + e.getMessage());
-			
+		if (WordCountUtil.checkForEmptyString(text)) {
+			return 0;
 		}
-		return 0;
+		String[] parts = WordCountUtil.splitString(text, DELIMITER_FOR_WORD_SPLIT);
+		return Arrays.stream(parts).filter(s -> WordCountUtil.isWord(s)).filter(s -> notAStopWord(s)).count();
 	}
-	
-	protected List<String> readStopWordsFromFile(String path) throws IOException {
-		File file = new File(getClass().getClassLoader().getResource(path).getFile());
+
+	protected static List<String> readStopWordsFromFile(String path) throws IOException {
+		File file = new File(WordCountExcludingStopWordsImpl.class.getClassLoader().getResource(path).getFile());
 		FileReader fileReader = new FileReader(file);
 		try (BufferedReader br = new BufferedReader(fileReader)) {
 			String line;
@@ -61,31 +60,35 @@ public class WordCountExcludingStopWordsImpl implements WordCountService {
 			return excludedStopWords;
 		}
 	}
-	
-	protected boolean notAStopWord(String word, List<String> stopwords) {
-		return stopwords == null || !stopwords.contains(word);
+
+	protected boolean notAStopWord(String word) {
+		return stopWords == null || !stopWords.contains(word);
 	}
-	
-	
+
 	@Override
 	public long uniqueCount(final String text) {
-		if(WordCountUtil.checkForEmptyString(text)) {
+		if (WordCountUtil.checkForEmptyString(text)) {
 			return 0;
 		}
-		return new HashSet<>(collectedWords).size();
+		String[] parts = WordCountUtil.splitString(text, DELIMITER_FOR_WORD_SPLIT);
+		return Arrays.stream(parts).filter(s -> WordCountUtil.isWord(s)).filter(s -> notAStopWord(s)).distinct()
+				.count();
 	}
-	
+
 	@Override
 	public double averageWordLength(String text) {
-		if(WordCountUtil.checkForEmptyString(text)) {
+		if (WordCountUtil.checkForEmptyString(text)) {
 			return 0;
 		}
-		double totalLengthOfWords = Arrays.stream(WordCountUtil.splitString(text, DELIMITER_FOR_WORD_SPLIT)).filter(s->
-		WordCountUtil.isWord(s))
-        .filter(s-> notAStopWord(s, stopWords))
-        .map(String::length).reduce(0, (a,b) -> a+b).doubleValue();
+		long totalCollectedWords = Arrays.stream(WordCountUtil.splitString(text, DELIMITER_FOR_WORD_SPLIT))
+				.filter(s -> WordCountUtil.isWord(s)).filter(s -> notAStopWord(s)).count();
 		
-		return WordCountUtil.roundToTwoDecimalPlaces((totalLengthOfWords/collectedWords.size()), 2, RoundingMode.HALF_UP);
+		double totalLengthOfWords = Arrays.stream(WordCountUtil.splitString(text, DELIMITER_FOR_WORD_SPLIT))
+				.filter(s -> WordCountUtil.isWord(s)).filter(s -> notAStopWord(s)).map(String::length)
+				.reduce(0, (a, b) -> a + b).doubleValue();
+
+		return WordCountUtil.roundToTwoDecimalPlaces((totalLengthOfWords / totalCollectedWords), 2,
+				RoundingMode.HALF_UP);
 	}
 
 	
@@ -94,7 +97,8 @@ public class WordCountExcludingStopWordsImpl implements WordCountService {
 		if(WordCountUtil.checkForEmptyString(text)) {
 			return Collections.emptyList();
 		}
-    	return collectedWords.stream()
+    	return Arrays.stream(WordCountUtil.splitString(text, DELIMITER_FOR_WORD_SPLIT))
+				.filter(s -> WordCountUtil.isWord(s)).filter(s -> notAStopWord(s))
                 .distinct()
                 .sorted(String::compareToIgnoreCase)
                 .collect(Collectors.toList());

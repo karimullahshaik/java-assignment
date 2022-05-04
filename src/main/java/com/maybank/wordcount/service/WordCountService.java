@@ -1,17 +1,14 @@
+package com.maybank.wordcount.service;
+
+import java.util.Collections;
+import java.util.List;
+
 /**
  * 
  * @Author: Karimullah Shaik
+ * Service Interface for Word Count
  * 
  */
-package com.maybank.wordcount.service;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import com.maybank.wordcount.util.WordCountUtil;
-
 public interface WordCountService {
 	
    /**
@@ -28,10 +25,20 @@ public interface WordCountService {
     	return 0l;
     }
     
+    /**
+     * 
+     * @param text Input String
+     * @return average word length in double datatype
+     */
     default double averageWordLength(final String text) {
     	return 0.0d;
     }
     
+    /**
+     * Default implementation for extracting Index words from the Input
+     * @param text
+     * @return List<String>  List of Index words
+     */
     default List<String> extractIndexWords(final String text){
     	return Collections.emptyList();
     }
