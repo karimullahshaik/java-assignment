@@ -22,6 +22,11 @@ public interface WordCountService {
     	return 0l;
     }
     
+    /**
+     * 
+     * @param text
+     * @return average word length in double datatype
+     */
     default double averageWordLength(final String text) {
     	return 0.0d;
     }

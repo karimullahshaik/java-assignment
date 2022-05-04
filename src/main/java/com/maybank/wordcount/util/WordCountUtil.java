@@ -39,6 +39,14 @@ public class WordCountUtil {
 		return text.trim().split(delimiter);
 	}
 	
+	
+	/**
+	 * 
+	 * @param inputNumber - Number to be rounded
+	 * @param scalingDecimals - Digits required after decimal point
+	 * @param mode - Rounding Algorithm required
+	 * @return Calculated Rounded value based on the Rounding mode, digits
+	 */
 	public static double roundToTwoDecimalPlaces(double inputNumber, int scalingDecimals, RoundingMode mode) {
 		BigDecimal bd = new BigDecimal(Double.toString(inputNumber));
         bd = bd.setScale(scalingDecimals, mode);
