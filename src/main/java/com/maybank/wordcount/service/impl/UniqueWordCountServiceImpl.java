@@ -1,8 +1,3 @@
-/**
- * 
- * @Author: Karimullah Shaik
- * 
- */
 package com.maybank.wordcount.service.impl;
 
 import java.io.IOException;

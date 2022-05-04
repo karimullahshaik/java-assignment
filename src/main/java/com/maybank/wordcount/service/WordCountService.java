@@ -5,6 +5,12 @@
  */
 package com.maybank.wordcount.service;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import com.maybank.wordcount.util.WordCountUtil;
 
 public interface WordCountService {
 	
@@ -24,6 +30,10 @@ public interface WordCountService {
     
     default double averageWordLength(final String text) {
     	return 0.0d;
+    }
+    
+    default List<String> extractIndexWords(final String text){
+    	return Collections.emptyList();
     }
 
 }

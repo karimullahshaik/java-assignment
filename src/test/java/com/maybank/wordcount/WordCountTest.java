@@ -1,8 +1,4 @@
-/**
- * 
- * @Author: Karimullah_117730 
- * 
- */
+
 package com.maybank.wordcount;
 
 import static org.junit.Assert.assertEquals;
@@ -14,6 +10,8 @@ import com.maybank.wordcount.service.impl.WordCountExcludingStopWordsImpl;
 
 /**
  * @author Karimullah Shaik
+ * 
+ * Test class for verifying the Word Count Functionalities
  *
  */
 public class WordCountTest {

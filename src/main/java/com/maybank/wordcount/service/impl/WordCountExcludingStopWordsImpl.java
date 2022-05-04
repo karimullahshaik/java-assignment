@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Logger;
@@ -87,4 +88,15 @@ public class WordCountExcludingStopWordsImpl implements WordCountService {
 		return WordCountUtil.roundToTwoDecimalPlaces((totalLengthOfWords/collectedWords.size()), 2, RoundingMode.HALF_UP);
 	}
 
+	
+	@Override
+	public List<String> extractIndexWords(final String text){
+		if(WordCountUtil.checkForEmptyString(text)) {
+			return Collections.emptyList();
+		}
+    	return collectedWords.stream()
+                .distinct()
+                .sorted(String::compareToIgnoreCase)
+                .collect(Collectors.toList());
+    }
 }
