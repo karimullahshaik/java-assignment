@@ -7,44 +7,45 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 import com.maybank.wordcount.service.WordCountService;
 import com.maybank.wordcount.util.WordCountUtil;
-
 /**
  * 
- * @Author: Karimullah Shaik 
+ * @Author: Karimullah Shaik
+ * 
+ *          Service Implementation Class to count the words excluding the
+ *          specified stop words read from the file.
  * 
  */
 public class WordCountExcludingStopWordsImpl implements WordCountService {
-	Logger log = Logger.getLogger(WordCountExcludingStopWordsImpl.class.getName());
-	
-	private List<String> collectedWords;
+	static Logger log = Logger.getLogger(WordCountExcludingStopWordsImpl.class.getName());
+
+	static List<String> stopWords;
+
+	static {
+		try {
+			stopWords = readStopWordsFromFile("stopwords.txt");
+		} catch (IOException e) {
+			log.info("Exception processing the wordcount: " + e.getMessage());
+		}
+	}
 
 	@Override
 	public long count(String text) {
-		try {
-			if(WordCountUtil.checkForEmptyString(text)) {
-				return 0;
-			}
-			List<String> stopWords = readStopWordsFromFile("stopwords.txt");
-			String[] parts = WordCountUtil.splitString(text, "\\s");
-			collectedWords = Arrays.stream(parts).filter(s -> WordCountUtil.isWord(s)).filter(s -> notAStopWord(s, stopWords)).collect(Collectors.toList());
-			return collectedWords.size();
-			
-		} catch (IOException e) {
-			log.info("Exception processing the wordcount: " + e.getMessage());
-			
+		long count = 0;
+		if (WordCountUtil.checkForEmptyString(text)) {
+			return count;
 		}
-		return 0;
+		String[] parts = text.trim().split("\\s");
+		return Arrays.stream(parts).filter(s -> WordCountUtil.isWord(s)).filter(s -> notAStopWord(s)).count();
+
 	}
 	
-	protected List<String> readStopWordsFromFile(String path) throws IOException {
-		File file = new File(getClass().getClassLoader().getResource(path).getFile());
+	protected static List<String> readStopWordsFromFile(String path) throws IOException {
+		File file = new File(WordCountExcludingStopWordsImpl.class.getClassLoader().getResource(path).getFile());
 		FileReader fileReader = new FileReader(file);
 		try (BufferedReader br = new BufferedReader(fileReader)) {
 			String line;
@@ -56,8 +57,8 @@ public class WordCountExcludingStopWordsImpl implements WordCountService {
 		}
 	}
 	
-	protected boolean notAStopWord(String word, List<String> stopwords) {
-		return stopwords == null || !stopwords.contains(word);
+	protected boolean notAStopWord(String word) {
+		return stopWords == null || !stopWords.contains(word);
 	}
 	
 	
@@ -66,7 +67,9 @@ public class WordCountExcludingStopWordsImpl implements WordCountService {
 		if(WordCountUtil.checkForEmptyString(text)) {
 			return 0;
 		}
-		return new HashSet<>(collectedWords).size();
+		String[] parts = text.trim().split("\\s");
+		return Arrays.stream(parts).filter(s -> WordCountUtil.isWord(s))
+				.filter(s -> notAStopWord(s)).distinct().count();
 	}
 
 }
