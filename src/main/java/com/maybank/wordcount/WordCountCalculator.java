@@ -6,9 +6,9 @@ import com.maybank.wordcount.service.impl.WordCountExcludingStopWordsImpl;
 
 /**
  * 
- * @Author: Karimullah Shaik 
+ * @Author: Karimullah Shaik
  * 
- * Program Entry point for Word Count Kata
+ *          Program Entry point for Word Count Kata
  * 
  */
 public class WordCountCalculator {
@@ -19,10 +19,9 @@ public class WordCountCalculator {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		final ScannedWords inputString = new ScannedWords(
-	            new Scanner(System.in),  new WordCountExcludingStopWordsImpl());
+		final ScannedWords inputString = new ScannedWords(new Scanner(System.in),
+				new WordCountExcludingStopWordsImpl());
 		inputString.readAndPrintTheWords();
-
 	}
 
 }
