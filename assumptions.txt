@@ -1,5 +1,6 @@
-Assumptions for Iteration 4:
+Assumptions for Iteration 6:
 1. Trim function is applied on the Input text from the very first iteration.
 2. Added "." as a consideration for the word. 
 3. Added "-" as a split condition for word when compared with previous three iterations.
 4. Word count is case sensitive.
+5. Single line file is being processed. If no argumnet with absolute file path is provided, program will print the error and program will get terminated.

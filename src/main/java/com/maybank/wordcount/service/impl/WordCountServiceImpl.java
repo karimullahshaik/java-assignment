@@ -9,7 +9,7 @@ import com.maybank.wordcount.util.WordCountUtil;
  * Input: Mary had a little lamb
  * Output: 5
  * 
- * @Author: Karimullah_117730 
+ * @Author: Karimullah Shaik 
  * 
  */
 public class WordCountServiceImpl implements WordCountService {

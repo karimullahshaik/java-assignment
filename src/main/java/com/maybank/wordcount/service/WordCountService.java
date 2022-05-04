@@ -1,6 +1,6 @@
 /**
  * 
- * @Author: Karimullah_117730 
+ * @Author: Karimullah Shaik
  * 
  */
 package com.maybank.wordcount.service;
@@ -20,6 +20,10 @@ public interface WordCountService {
      */
     default long uniqueCount(final String text) {
     	return 0l;
-    };
+    }
+    
+    default double averageWordLenght(final String text) {
+    	return 0.0d;
+    }
 
 }

@@ -23,7 +23,11 @@ import com.maybank.wordcount.util.WordCountUtil;
 public class WordCountExcludingStopWordsImpl implements WordCountService {
 	Logger log = Logger.getLogger(WordCountExcludingStopWordsImpl.class.getName());
 	
+	private List<String> stopWords;
+	
 	private List<String> collectedWords;
+	
+	private static final String DELIMITER_FOR_WORD_SPLIT = "\\s";
 
 	@Override
 	public long count(String text) {
@@ -31,8 +35,8 @@ public class WordCountExcludingStopWordsImpl implements WordCountService {
 			if(WordCountUtil.checkForEmptyString(text)) {
 				return 0;
 			}
-			List<String> stopWords = readStopWordsFromFile("stopwords.txt");
-			String[] parts = WordCountUtil.splitString(text, "\\s");
+			stopWords = readStopWordsFromFile("stopwords.txt");
+			String[] parts = WordCountUtil.splitString(text, DELIMITER_FOR_WORD_SPLIT);
 			collectedWords = Arrays.stream(parts).filter(s -> WordCountUtil.isWord(s)).filter(s -> notAStopWord(s, stopWords)).collect(Collectors.toList());
 			return collectedWords.size();
 			
@@ -67,6 +71,19 @@ public class WordCountExcludingStopWordsImpl implements WordCountService {
 			return 0;
 		}
 		return new HashSet<>(collectedWords).size();
+	}
+	
+	@Override
+	public double averageWordLenght(String text) {
+		if(WordCountUtil.checkForEmptyString(text)) {
+			return 0;
+		}
+		double totalLengthOfWords = Arrays.stream(WordCountUtil.splitString(text, DELIMITER_FOR_WORD_SPLIT)).filter(s->
+		WordCountUtil.isWord(s))
+        .filter(s-> notAStopWord(s, stopWords))
+        .map(String::length).reduce(0, (a,b) -> a+b).doubleValue();
+		
+		return totalLengthOfWords/collectedWords.size();
 	}
 
 }

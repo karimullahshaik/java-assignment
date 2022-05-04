@@ -47,5 +47,5 @@ public class UniqueWordCountServiceImpl extends WordCountExcludingStopWordsImpl 
 		return new HashSet<>(collectedWords).size();
 			
 	}
-
+	
 }
