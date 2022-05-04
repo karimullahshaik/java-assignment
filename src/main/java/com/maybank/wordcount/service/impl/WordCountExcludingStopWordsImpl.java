@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -74,7 +75,7 @@ public class WordCountExcludingStopWordsImpl implements WordCountService {
 	}
 	
 	@Override
-	public double averageWordLenght(String text) {
+	public double averageWordLength(String text) {
 		if(WordCountUtil.checkForEmptyString(text)) {
 			return 0;
 		}
@@ -83,7 +84,7 @@ public class WordCountExcludingStopWordsImpl implements WordCountService {
         .filter(s-> notAStopWord(s, stopWords))
         .map(String::length).reduce(0, (a,b) -> a+b).doubleValue();
 		
-		return totalLengthOfWords/collectedWords.size();
+		return WordCountUtil.roundToTwoDecimalPlaces((totalLengthOfWords/collectedWords.size()), 2, RoundingMode.HALF_UP);
 	}
 
 }

@@ -22,7 +22,7 @@ public interface WordCountService {
     	return 0l;
     }
     
-    default double averageWordLenght(final String text) {
+    default double averageWordLength(final String text) {
     	return 0.0d;
     }
 
