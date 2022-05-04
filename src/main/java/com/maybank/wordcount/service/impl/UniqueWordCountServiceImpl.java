@@ -1,15 +1,8 @@
-/**
- * 
- * @Author: Karimullah_117730 
- * 
- */
 package com.maybank.wordcount.service.impl;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.maybank.wordcount.util.WordCountUtil;
 
@@ -20,43 +13,33 @@ import com.maybank.wordcount.util.WordCountUtil;
  */
 public class UniqueWordCountServiceImpl extends WordCountExcludingStopWordsImpl {
 	
-	private List<String> collectedWords;
+	static List<String> stopWords;
+	
+	static {
+		try {
+			stopWords = readStopWordsFromFile("stopwords.txt");
+		} catch (IOException e) {
+			log.info("Exception processing the wordcount: " + e.getMessage());
+		}
+	}
 	
 	@Override
 	public long count(String text) {
-		try {
-			List<String> stopWords = readStopWordsFromFile("stopwords.txt");
 			if(WordCountUtil.checkForEmptyString(text)) {
 				return 0;
 			}
 			String[] parts = WordCountUtil.splitString(text, "[-\\s]");
-			return Arrays.stream(parts).filter(s -> WordCountUtil.isWord(s)).filter(s -> notAStopWord(s, stopWords)).count();
-			
-		} catch (IOException e) {
-			log.info("Exception processing the wordcount: " + e.getMessage());
-			
-		}
-		return 0;
-		
+			return Arrays.stream(parts).filter(s -> WordCountUtil.isWord(s)).filter(s -> notAStopWord(s)).count();
 	}
 	
 	@Override
 	public long uniqueCount(final String text) {
-		try {
-			List<String> stopWords = readStopWordsFromFile("stopwords.txt");
 			if(WordCountUtil.checkForEmptyString(text)) {
 				return 0;
 			}
 			String[] parts = WordCountUtil.splitString(text, "[-\\s]");
-			collectedWords = Arrays.stream(parts).filter(s -> WordCountUtil.isWord(s)).filter(s -> notAStopWord(s, stopWords)).collect(Collectors.toList());
-			return new HashSet<>(collectedWords).size();
-			
-		} catch (IOException e) {
-			log.info("Exception processing the unique wordcount: " + e.getMessage());
-			
-		}
-		
-		return collectedWords.size();
+			return Arrays.stream(parts).filter(s -> WordCountUtil.isWord(s))
+					.filter(s -> notAStopWord(s)).distinct().count();
 	}
 
 }

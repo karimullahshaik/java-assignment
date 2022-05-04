@@ -15,31 +15,39 @@ import com.maybank.wordcount.util.WordCountUtil;
 
 /**
  * 
- * @Author: Karimullah Shaik 
+ * @Author: Karimullah Shaik
+ * 
+ *          Service Implementation Class to count the words excluding the
+ *          specified stop words read from the file.
  * 
  */
 public class WordCountExcludingStopWordsImpl implements WordCountService {
-	Logger log = Logger.getLogger(WordCountExcludingStopWordsImpl.class.getName());
+	static Logger log = Logger.getLogger(WordCountExcludingStopWordsImpl.class.getName());
+
+	static List<String> stopWords;
+
+	static {
+		try {
+			stopWords = readStopWordsFromFile("stopwords.txt");
+		} catch (IOException e) {
+			log.info("Exception processing the wordcount: " + e.getMessage());
+		}
+	}
 
 	@Override
 	public long count(String text) {
-		try {
-			List<String> stopWords = readStopWordsFromFile("stopwords.txt");
-			if(WordCountUtil.checkForEmptyString(text)) {
-				return 0;
-			}
-			String[] parts = WordCountUtil.splitString(text, "\\s");
-			return Arrays.stream(parts).filter(s -> WordCountUtil.isWord(s)).filter(s -> notAStopWord(s, stopWords)).count();
-			
-		} catch (IOException e) {
-			log.info("Exception processing the wordcount: " + e.getMessage());
-			
+		long count = 0;
+		if (WordCountUtil.checkForEmptyString(text)) {
+			return count;
 		}
-		return 0;
+		String[] parts = text.trim().split("\\s");
+		return Arrays.stream(parts).filter(s -> WordCountUtil.isWord(s)).filter(s -> notAStopWord(s)).count();
+
 	}
+
 	
-	protected List<String> readStopWordsFromFile(String path) throws IOException {
-		File file = new File(getClass().getClassLoader().getResource(path).getFile());
+	protected static List<String> readStopWordsFromFile(String path) throws IOException {
+		File file = new File(WordCountExcludingStopWordsImpl.class.getClassLoader().getResource(path).getFile());
 		FileReader fileReader = new FileReader(file);
 		try (BufferedReader br = new BufferedReader(fileReader)) {
 			String line;
@@ -51,8 +59,13 @@ public class WordCountExcludingStopWordsImpl implements WordCountService {
 		}
 	}
 	
-	protected boolean notAStopWord(String word, List<String> stopwords) {
-		return stopwords == null || !stopwords.contains(word);
+	/**
+	 * 
+	 * @param word Input Word
+	 * @return true/false based on the input passed.
+	 */
+	protected boolean notAStopWord(String word) {
+		return stopWords == null || !stopWords.contains(word);
 	}
 	
 
